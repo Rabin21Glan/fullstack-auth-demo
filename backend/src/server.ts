@@ -58,6 +58,7 @@ async function startServer() {
     express.json({ limit: '50mb' }),
     expressMiddleware(server, {
       context: createContext,
+      
     })
   );
 

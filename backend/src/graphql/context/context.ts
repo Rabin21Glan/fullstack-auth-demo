@@ -4,7 +4,7 @@ import { TokenService } from '../../services/tokenService';
 import { prisma } from '../../config/database';
 
 
-export const createContext = async ({ req }: { req: Request }): Promise<AuthContext> => {
+export const createContext = async ({ req }: { req: Request },): Promise<AuthContext> => {
   const context: AuthContext= { req };
 
   try {
@@ -27,8 +27,7 @@ export const createContext = async ({ req }: { req: Request }): Promise<AuthCont
       }
     }
   } catch (error) {
-    // Token is invalid, but we don't throw error here
-    // Let resolvers handle authentication requirements
+    
   }
 
   return context;

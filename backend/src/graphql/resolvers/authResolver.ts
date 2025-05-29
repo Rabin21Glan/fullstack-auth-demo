@@ -1,4 +1,4 @@
-import { AuthService } from '../../services/authService';
+
 import { AuthContext, RegisterInput, LoginInput, ResetPasswordInput } from '../../types/authTypes';
 import {
   registerSchema,
@@ -7,7 +7,7 @@ import {
   resetPasswordSchema,
 } from '../../utils/validation';
 import { ERROR_MESSAGES } from '../../utils/messages';
-
+import { AuthController } from '../../controller/authConroller';
 export const authResolvers = {
   Query: {
     me: async (_: any, __: any, context: AuthContext) => {
@@ -23,7 +23,7 @@ export const authResolvers = {
     register: async (_: any, { input }: { input: RegisterInput }) => {
       try {
         const validatedInput = registerSchema.parse(input);
-        return await AuthService.register(validatedInput);
+        return await AuthController.register(validatedInput);
       } catch (error: any) {
         if (error.name === 'ZodError') {
           throw new Error(error.errors[0].message);
@@ -35,7 +35,7 @@ export const authResolvers = {
     login: async (_: any, { input }: { input: LoginInput }) => {
       try {
         const validatedInput = loginSchema.parse(input);
-        return await AuthService.login(validatedInput);
+        return await AuthController.login(validatedInput);
       } catch (error: any) {
         if (error.name === 'ZodError') {
           throw new Error(error.errors[0].message);
@@ -48,27 +48,27 @@ export const authResolvers = {
       if (!refreshToken) {
         throw new Error('Refresh token is required');
       }
-      return await AuthService.refreshToken(refreshToken);
+      return await AuthController.refreshToken(refreshToken);
     },
 
     logout: async (_: any, { refreshToken }: { refreshToken: string }) => {
       if (!refreshToken) {
         throw new Error('Refresh token is required');
       }
-      return await AuthService.logout(refreshToken);
+      return await AuthController.logout(refreshToken);
     },
 
     verifyEmail: async (_: any, { token }: { token: string }) => {
       if (!token) {
         throw new Error('Verification token is required');
       }
-      return await AuthService.verifyEmail(token);
+      return await AuthController.verifyEmail(token);
     },
 
     forgotPassword: async (_: any, { email }: { email: string }) => {
       try {
         const validatedInput = forgotPasswordSchema.parse({ email });
-        return await AuthService.forgotPassword(validatedInput.email);
+        return await AuthController.forgotPassword(validatedInput.email);
       } catch (error: any) {
         if (error.name === 'ZodError') {
           throw new Error(error.errors[0].message);
@@ -80,7 +80,7 @@ export const authResolvers = {
     resetPassword: async (_: any, { input }: { input: ResetPasswordInput }) => {
       try {
         const validatedInput = resetPasswordSchema.parse(input);
-        return await AuthService.resetPassword(validatedInput);
+        return await AuthController.resetPassword(validatedInput);
       } catch (error: any) {
         if (error.name === 'ZodError') {
           throw new Error(error.errors[0].message);
@@ -93,7 +93,7 @@ export const authResolvers = {
       if (!email) {
         throw new Error('Email is required');
       }
-      return await AuthService.resendVerificationEmail(email);
+      return await AuthController.resendVerificationEmail(email);
     },
   },
 };
