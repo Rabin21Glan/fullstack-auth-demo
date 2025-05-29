@@ -1,14 +1,14 @@
 "use client"
-import { useState } from "react"
 import type React from "react"
+import { useState } from "react"
 
-import { useMutation } from "@apollo/client"
-import Link from "next/link"
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react"
 import { REGISTER_MUTATION } from "@/lib/mutations"
+import { useMutation } from "@apollo/client"
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-import { Card, CardBody, CardHeader, Input, Button, Divider, Spacer } from "@heroui/react"
+import { Button, Card, CardBody, CardHeader, Divider, Input, Spacer } from "@heroui/react"
 
 export default function RegisterHero() {
   const [firstName, setFirstName] = useState("")
@@ -47,7 +47,7 @@ export default function RegisterHero() {
 
       if (data?.register?.message) {
         setSuccess(data.register.message)
-        router.push("/auth/verify-email-message")
+        router.push("/verify-email-message")
       }
     } catch (err: any) {
       setError(err.message || "Registration failed")

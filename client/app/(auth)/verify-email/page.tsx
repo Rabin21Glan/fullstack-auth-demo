@@ -28,7 +28,7 @@ export default function VerifyEmailPage() {
         setSuccess(data.verifyEmail.message)
         // Redirect after a short delay to show success message
         setTimeout(() => {
-          router.push("/auth/login")
+          router.push("/login")
         }, 2000)
       }
     } catch (err: any) {
@@ -161,7 +161,7 @@ export default function VerifyEmailPage() {
 
                   <Button
                     as={Link}
-                    href="/auth/register"
+                    href="/register"
                     variant="bordered"
                     size="lg"
                     className="w-full font-semibold"
@@ -196,7 +196,7 @@ export default function VerifyEmailPage() {
 
                 <Button
                   as={Link}
-                  href="/auth/login"
+                  href="/login"
                   color="primary"
                   size="lg"
                   className="w-full font-semibold"
@@ -225,7 +225,7 @@ export default function VerifyEmailPage() {
                 <div className="space-y-3">
                   <Button
                     as={Link}
-                    href="/auth/register"
+                    href="/register"
                     color="primary"
                     size="lg"
                     className="w-full font-semibold"
@@ -236,7 +236,7 @@ export default function VerifyEmailPage() {
 
                   <Button
                     as={Link}
-                    href="/auth/login"
+                    href="/login"
                     variant="bordered"
                     size="lg"
                     className="w-full font-semibold"
