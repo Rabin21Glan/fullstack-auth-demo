@@ -2,15 +2,15 @@ import { prisma } from '../config/database';
 import { hashPassword, comparePassword } from '../utils/hash';
 
 
-import { TokenService } from './tokenService';
-import { EmailService } from './emailService';
 import { LoginInput ,  RegisterInput,
 
   AuthResponse,
   ResetPasswordInput,} from '../types/authTypes';
 import { ERROR_MESSAGES } from '../utils/messages';
+import { TokenService } from '../services/tokenService';
+import { EmailService } from '../services/emailService';
 
-export class AuthService {
+export class AuthController {
   static async register(input: RegisterInput): Promise<{ message: string }> {
     const { email, password, firstName, lastName } = input;
 
@@ -49,9 +49,11 @@ export class AuthService {
     }
 
     return {
-      message: 'Registration successful. Please check your email for verification.',
+      message: ` Hello ${user.firstName}! Registration successful. Please check your email for verification.`,
     };
   }
+
+
 
   static async login(input: LoginInput): Promise<AuthResponse> {
     const { email, password } = input;

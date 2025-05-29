@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { User, Shield, LogOut, ArrowRight, Sparkles } from "lucide-react"
-import Link from "next/link"
-import { Card, CardBody, CardHeader, Button, Chip, Divider, Code, Snippet, Spinner } from "@heroui/react"
+import AuthContext from "@/context/authContext"
+import { LOGOUT_MUTATION } from "@/lib/mutations"
 import { useMutation } from "@apollo/client"
-import { LOGIN_MUTATION, LOGOUT_MUTATION } from "@/lib/mutations"
+import { Button, Card, CardBody, CardHeader, Chip, Code, Divider, Snippet } from "@heroui/react"
+import { ArrowRight, LogOut, Shield, User } from "lucide-react"
+import Link from "next/link"
+import { useContext } from "react"
 
 interface AuthData {
   user: {
@@ -22,25 +23,11 @@ interface AuthData {
 }
 
 export default function Home() {
-  const [authData, setAuthData] = useState<AuthData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+const {auth:authData,setAuth:setAuthData} = useContext(AuthContext);
+  
 const [signOut,{loading}] = useMutation(LOGOUT_MUTATION);
-  useEffect(() => {
-    // Check for auth data in localStorage
-    try {
-      const storedAuth = localStorage.getItem("auth")
-      if (storedAuth) {
-        const parsedAuth: AuthData = JSON.parse(storedAuth)
-        setAuthData(parsedAuth)
-      }
-    } catch (error) {
-      console.error("Error parsing auth data:", error)
-      // Clear invalid auth data
-      localStorage.removeItem("auth")
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  
+
 
   const handleLogout = async() => {
     localStorage.removeItem("auth")
@@ -53,19 +40,10 @@ const [signOut,{loading}] = useMutation(LOGOUT_MUTATION);
       }
     }
   );
-  console.log(data)
+
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-default-100">
-        <div className="text-center space-y-4">
-          <Spinner size="lg" color="primary" />
-          <p className="text-default-500">Loading your dashboard...</p>
-        </div>
-      </div>
-    )
-  }
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-default-100">
@@ -175,24 +153,10 @@ const [signOut,{loading}] = useMutation(LOGOUT_MUTATION);
         </div>
 }
 {!authData && 
-        // Non-authenticated Landing Page
+     
         <div className="min-h-screen flex items-center justify-center p-4">
           <div className="w-full max-w-2xl">
-            {/* Hero Header */}
-            <div className="text-center mb-8">
-              <div className="flex justify-center mb-6">
-                <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-10 h-10 text-primary" />
-                </div>
-              </div>
-
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
-                Welcome to Our Platform
-              </h1>
-              <p className="text-default-500 text-xl">Build amazing things with our powerful tools and services</p>
-            </div>
-
-            {/* Welcome Card */}
+          
             <Card className="w-full shadow-2xl mb-6">
               <CardHeader className="flex flex-col gap-3 pb-0">
                 <h2 className="text-2xl font-semibold text-center">Get Started Today</h2>
@@ -202,36 +166,12 @@ const [signOut,{loading}] = useMutation(LOGOUT_MUTATION);
               </CardHeader>
 
               <CardBody className="gap-6">
-                {/* Features */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-primary/10 rounded-lg">
-                    <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <Shield className="w-6 h-6 text-primary" />
-                    </div>
-                    <h3 className="font-medium text-default-700 mb-1">Secure</h3>
-                    <p className="text-small text-default-500">Enterprise-grade security</p>
-                  </div>
-
-                  <div className="text-center p-4 bg-secondary/10 rounded-lg">
-                    <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <ArrowRight className="w-6 h-6 text-secondary" />
-                    </div>
-                    <h3 className="font-medium text-default-700 mb-1">Fast</h3>
-                    <p className="text-small text-default-500">Lightning-fast performance</p>
-                  </div>
-
-                  <div className="text-center p-4 bg-success/10 rounded-lg">
-                    <div className="w-12 h-12 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <Sparkles className="w-6 h-6 text-success" />
-                    </div>
-                    <h3 className="font-medium text-default-700 mb-1">Modern</h3>
-                    <p className="text-small text-default-500">Latest technologies</p>
-                  </div>
-                </div>
+               
+               
 
                 <Divider />
 
-                {/* CTA Snippet */}
+              
                 <div className="space-y-2">
                   <Snippet hideCopyButton hideSymbol variant="bordered" className="w-full">
                     <span>
@@ -246,7 +186,7 @@ const [signOut,{loading}] = useMutation(LOGOUT_MUTATION);
                 <div className="space-y-3">
                   <Button
                     as={Link}
-                    href="/auth/register"
+                    href="/register"
                     color="primary"
                     size="lg"
                     className="w-full font-semibold"
@@ -258,7 +198,7 @@ const [signOut,{loading}] = useMutation(LOGOUT_MUTATION);
 
                   <Button
                     as={Link}
-                    href="/auth/login"
+                    href="/login"
                     variant="bordered"
                     size="lg"
                     className="w-full font-semibold"

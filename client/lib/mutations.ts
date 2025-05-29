@@ -28,7 +28,6 @@ mutation Register($input: RegisterInput!) {
 export const REFRESH_TOKEN_MUTATION=gql`
 mutation RefreshToken($refreshToken: String!) {
   refreshToken(refreshToken: $refreshToken) {
-    user { id email }
     accessToken
     refreshToken
   }

@@ -1,46 +1,30 @@
 "use client"
-import { useState } from "react"
-import type React from "react"
 
-import { useMutation } from "@apollo/client"
+import { Eye, EyeOff, Lock, Mail } from "lucide-react"
 import Link from "next/link"
-import { Eye, EyeOff, Mail, Lock } from "lucide-react"
-import { LOGIN_MUTATION } from "@/lib/mutations"
-import { useRouter } from "next/navigation"
 
-import { Card, CardBody, CardHeader, Input, Button, Divider, Spacer } from "@heroui/react"
+import { useLogin } from "@/hooks/useLogin"
+import { Button, Card, CardBody, CardHeader, Divider, Input, Spacer } from "@heroui/react"
 
 export default function LoginHero() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState("")
 
-  const router = useRouter()
-  const [login, { loading }] = useMutation(LOGIN_MUTATION)
+ const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    showPassword,
+    setShowPassword,
+    error,
+    success,
+    loading,
+    handleSubmit,
+    handlResendVerification,
+  
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+ } = useLogin();
+  
 
-    try {
-      const { data } = await login({
-        variables: {
-          input: {
-            email,
-            password,
-          },
-        },
-      })
-
-      if (data?.login) {
-        localStorage.setItem("auth", JSON.stringify(data.login))
-        router.push("/")
-      }
-    } catch (err: any) {
-      setError(err.message || "Login failed")
-    }
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-default-100 p-4">
@@ -64,9 +48,16 @@ export default function LoginHero() {
 
           <CardBody className="gap-4">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {error && (
-                <div className="bg-danger-50 border border-danger-200 text-danger-700 px-4 py-3 rounded-lg">
+              {(error&&!success )&& (
+                <div className="bg-danger-50 border border-danger-200 text-danger-700 px-4 py-3 rounded-lg text-wh">
                   {error}
+                <Button onClick={handlResendVerification}>Resend Email Verification</Button>
+                </div>
+              )}
+               {(success )&& (
+                <div className="bg-green-500  border border-danger-200 text-danger-700 px-4 py-3 rounded-lg">
+               {success}
+                    <Link className="bg-black p-2 border rounded-sm text-white ml-5" href={'https://mail.google.com'}>Open Mail</Link>
                 </div>
               )}
 
@@ -110,6 +101,16 @@ export default function LoginHero() {
               />
 
               <Spacer y={2} />
+                 <Button
+                type="submit"
+                color="primary"
+                size="lg"
+                
+                className="w-full font-semibold"
+                radius="lg"
+              >
+                
+              </Button>
 
               <Button
                 type="submit"
@@ -121,12 +122,23 @@ export default function LoginHero() {
               >
                 {loading ? "Signing in..." : "Sign in"}
               </Button>
+                    <Link
+               href={'/forgot-password'}
+               
+                
+                className="w-full font-thin"
+                
+              >
+                Forgot password
+                
+              </Link>
 
               <Divider className="my-4" />
 
               <p className="text-center text-small">
                 <span className="text-default-500">Need to create an account? </span>
-                <Link href="/auth/register" className="text-primary hover:text-primary-600 font-medium">
+               
+                <Link href="/register" className="text-primary hover:text-primary-600 font-medium">
                   Sign up
                 </Link>
               </p>
